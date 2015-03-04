@@ -1,3 +1,11 @@
 body {
     text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+}
+canvas{
+	left: 0;
+	top:-50px;
+	bottom: 0;
+	position: absolute;
 }

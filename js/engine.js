@@ -25,9 +25,21 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
-    canvas.height = 606;
+
     doc.body.appendChild(canvas);
+
+    // resize the canvas to fill browser window dynamically
+    window.addEventListener('resize', resizeCanvas, true);
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight + 50;
+        /**
+         * Your drawings need to be inside this function otherwise they will be reset when
+         * you resize the browser window and the canvas goes will be cleared.
+         */
+    }
+    resizeCanvas();
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -69,6 +81,23 @@ var Engine = (function(global) {
         main();
     }
 
+ function checkCollisions() {
+    /* Find minimum distance between player and enemy. If minimum distance is
+    small enough, consider it to be a collision and reset the game. */
+    var colideX = 0.5 * enemy.width;
+    var colideY = enemy.height;
+
+    var xPlayer = player.x;
+    var yPlayer = player.y;
+
+    allEnemies.forEach(function(enemy) {
+        if (Math.abs(xPlayer - enemy.x) < colideX && Math.abs(yPlayer - enemy.y) < colideX) {
+            alert("Bang! FROG YOU!");
+            reset();
+        }
+    });
+}
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -80,7 +109,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+         checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -103,26 +132,30 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
+
+
     function render() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
         var rowImages = [
                 'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
+                'images/road-block-last.png',   // Row 1 of 3 of stone
+                'images/road-block.png',   // Row 2 of 3 of stone
+                'images/road-block.png',   // Row 2 of 3 of stone
+                'images/road-block.png',   // Row 2 of 3 of stone
+                'images/road-block-one.png',   // Row 3 of 3 of stone
                 'images/grass-block.png',   // Row 1 of 2 of grass
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
-            numRows = 6,
-            numCols = 5,
+            numRows = 8,
+            numCols = 50,
             row, col;
-
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
+
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
                 /* The drawImage function of the canvas' context element
@@ -135,10 +168,9 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
-
         renderEntities();
     }
+
 
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
@@ -160,7 +192,8 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        player.x =  window.innerWidth / 2;
+        player.y = window.innerHeight / 1.2;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -169,6 +202,9 @@ var Engine = (function(global) {
      */
     Resources.load([
         'images/stone-block.png',
+        'images/road-block-one.png',
+        'images/road-block-last.png',
+        'images/road-block.png',
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
