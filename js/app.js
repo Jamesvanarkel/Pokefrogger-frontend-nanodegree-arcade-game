@@ -1,3 +1,5 @@
+
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -29,7 +31,7 @@ Enemy.prototype.render = function() {
 var Player = function(){
     this.sprite = 'images/char-boy.png';
     this.x =  window.innerWidth / 2;
-    this.y = 380;
+    this.y = 100;
     this.width = 101;
     this.height = 101;
 
@@ -56,7 +58,7 @@ Player.prototype.handleInput = function(move){
             this.y -= 83;
         break;
         case 'right':
-            if(this.x + 101 > window.innerWidth - 101) return;
+            if(this.x + 101 > window.innerWidth - 201) return;
             this.x += 101;
         break;
         case 'down':
@@ -103,3 +105,10 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+  function verticalScrollBackground(){
+        if(player.y > (canvasY * 0.5)){
+            console.log("im over the half of the screen");
+        }
+    }
+   verticalScrollBackground();

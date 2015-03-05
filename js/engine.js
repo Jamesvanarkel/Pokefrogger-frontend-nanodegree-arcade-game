@@ -24,6 +24,8 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
+        canvasY = canvas.height;
+        canvasX = canvas.width;
 
 
     doc.body.appendChild(canvas);
@@ -92,7 +94,7 @@ var Engine = (function(global) {
 
     allEnemies.forEach(function(enemy) {
         if (Math.abs(xPlayer - enemy.x) < colideX && Math.abs(yPlayer - enemy.y) < colideX) {
-            alert("Bang! FROG YOU!");
+            alert("Bang! YOU GOT FROGGED!");
             reset();
         }
     });
@@ -172,6 +174,7 @@ var Engine = (function(global) {
     }
 
 
+
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
@@ -218,3 +221,4 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
+
