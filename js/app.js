@@ -12,19 +12,11 @@ var Enemy = function() {
     this.y = Math.ceil(Math.random() * 5) * 83 - 83 * 0.3;
     this.speed = Math.floor(Math.random() * (400)) + 150;
 
-}
+    this.path = 'images/enemies/'; // default path of image here
 
-Enemy.prototype.random = function(imgAr, path) {
-
-    random_images_array = ['01.png', '02.png', '03.png'];
-
-    path = path || 'images/enemies/'; // default path here
-    var num = Math.floor( Math.random() * imgAr.length );
-    var img = imgAr[ num ];
-    this.sprite =  path + img ;
-
-}
-
+    this.num = Math.floor(Math.random() * ((0-151)+1) + 151); // generate a number between 1 and 151
+    this.sprite =   this.path + this.num + ".png"; //make the image string
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
