@@ -13,6 +13,11 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
+var rowImages = [],
+        numRows = Math.round(window.innerHeight / 16) ,
+        numCols = Math.round(window.innerWidth / 16) ,
+        row, col ;
+
 
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
@@ -35,7 +40,7 @@ var Engine = (function(global) {
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight + 50;
+        canvas.height = window.innerHeight ;
         /**
          * Your drawings need to be inside this function otherwise they will be reset when
          * you resize the browser window and the canvas goes will be cleared.
@@ -134,32 +139,43 @@ var Engine = (function(global) {
      * they are flipbooks creating the illusion of animation but in reality
      * they are just drawing the entire screen over and over.
      */
+    function makeStage () {
+
+        var backgroundArray = ['images/PokeRoad.png', 'images/playerStart.png'];
+
+        for (var i = 0; i < numCols; i++) {
+            rowImages.push(backgroundArray[Math.floor(Math.random() * backgroundArray.length)]);
+        };
+        function startPlayer(){
+
+           for (var i = 0; i < 10; i++) {
+            rowImages.pop();
+           };
+            for (var i = 0; i < 10; i++) {
+            rowImages.push('images/playerStart.png');
+           };
+
+
+            console.log("i ran");
+        }
+        startPlayer();
+
+    }
+        makeStage();
 
 
     function render() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
-        var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/road-block-last.png',   // Row 1 of 3 of stone
-                'images/road-block.png',   // Row 2 of 3 of stone
-                'images/road-block.png',   // Row 2 of 3 of stone
-                'images/road-block.png',   // Row 2 of 3 of stone
-                'images/road-block-one.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
-            ],
-            numRows = 8,
-            numCols = 50,
-            row, col;
+
+
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-
-        for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
+                 for (row = 0; row < numRows; row++) {
                 /* The drawImage function of the canvas' context element
                  * requires 3 parameters: the image to draw, the x coordinate
                  * to start drawing and the y coordinate to start drawing.
@@ -167,7 +183,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                ctx.drawImage(Resources.get(rowImages[row]), col * 16 , row * 16);
             }
         }
         renderEntities();
@@ -366,7 +382,9 @@ var Engine = (function(global) {
         'images/enemies/148.png',
         'images/enemies/149.png',
         'images/enemies/150.png',
-        'images/enemies/151.png'
+        'images/enemies/151.png',
+        'images/PokeRoad.png',
+        'images/playerStart.png'
 
 
     ]);

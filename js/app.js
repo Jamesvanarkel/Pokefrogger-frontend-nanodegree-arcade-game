@@ -6,8 +6,8 @@
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.width = 101;
-    this.height = 101;
+    this.width = 61;
+    this.height = 60;
     this.x = -101;
     this.y = Math.ceil(Math.random() * 5) * 83 - 83 * 0.3;
     this.speed = Math.floor(Math.random() * (400)) + 150;
@@ -25,6 +25,7 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x = this.x + this.speed * dt;
+
     // If the Enemy exeeds the window width it will be reset by the reset function
     if (this.x > window.innerWidth) {
         this.reset();
@@ -35,6 +36,13 @@ Enemy.prototype.reset = function() {
     this.x = -110;
     this.y = Math.ceil(Math.random() * 5) * 83 - 83 * 0.3;
     this.speed = Math.floor(Math.random() * (400)) + 150;
+
+    //regenerate sprite so it is a diffrent Pokémon
+
+    this.path = 'images/enemies/'; // default path of image here
+
+    this.num = Math.floor(Math.random() * ((0-151)+1) + 151); // generate a number between 1 and 151
+    this.sprite =   this.path + this.num + ".png"; //make the image string
 }
 
 
