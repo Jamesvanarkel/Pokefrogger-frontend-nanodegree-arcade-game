@@ -9,8 +9,8 @@ var Enemy = function() {
     this.width = 61;
     this.height = 60;
     this.x = -101;
-    this.y = Math.ceil(Math.random() * 5) * 83 - 83 * 0.3;
-    this.speed = Math.floor(Math.random() * (400)) + 150;
+    this.y = Math.ceil(Math.random() * 9) * 61 - 61 * 0.3;
+    this.speed = Math.floor(Math.random() * (400)) + 150; // left to right
 
     this.path = 'images/enemies/'; // default path of image here
 
@@ -58,9 +58,10 @@ Enemy.prototype.render = function() {
 var Player = function(){
 
     this.sprite = 'images/ash-back.png';
-    this.x =  window.innerWidth / 2;
     this.width = 22;
     this.height = 27;
+    this.x =  window.innerWidth / 2;
+    this.y = window.innerHeight / 1.05;
 
 // Change the img sprite to the right instanse: source: http://stackoverflow.com/questions/15551490/change-image-on-keypress
     this.imgUp = 'images/ash-back.png';
@@ -68,17 +69,11 @@ var Player = function(){
     this.imgRight = 'images/ash-right.png';
     this.imgDown = 'images/ash-front.png';
 
-
 }
 
 Player.prototype.update = function(){
 
 }
-
-Player.prototype.render = function(){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
 Player.prototype.handleInput = function(move){
       switch(move) {
         case 'left':
@@ -102,11 +97,39 @@ Player.prototype.handleInput = function(move){
             player.sprite = player.imgDown; break; // down key
         break;
         case 'space':
-            ctx.fillText('Welcome to spaceMode', 10, 90);
+            ctx.fillText('Welcome to spaceMode', innerWidth / 2 , innerHeight / 2);
             console.log('space');
         break;
     }
-    this.render();
+}
+Player.prototype.render = function(){
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+// ////////////////////////////////////
+// //         Pokeball              //
+// ///////////////////////////////////
+
+var Pokeball = function(){
+    this.sprite = 'images/pokeball.png';
+    this.width = 16;
+    this.height = 16;
+    this.y = Math.floor(Math.random()* innerHeight);
+    this.x = Math.floor(Math.random() * innerWidth);
+    console.log("I Choose you");
+}
+Pokeball.prototype.update = function (dt) {
+// You should multiply any movement by the dt parameter
+// which will ensure the game runs at the same speed for
+// all computers.
+  this.x * (dt);
+  this.y * (dt);
+}
+
+Pokeball.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+Pokeball.prototype.reset = function (){
 }
 
 // ////////////////////////////////////
@@ -119,11 +142,12 @@ Player.prototype.handleInput = function(move){
 // var myVar = setInterval (newEnemies, 2000);
 var allEnemies = [];
 var player = new Player();
-
-for (wantedEnemies = 0; wantedEnemies < 8; wantedEnemies++) {
+var pokeball = new Pokeball();
+for (wantedEnemies = 0; wantedEnemies < 10; wantedEnemies++) {
     var enemy = new Enemy();
     allEnemies.push(enemy);
 }
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

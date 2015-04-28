@@ -13,7 +13,7 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-var rowImages = [],
+var rowImages = ['images/water.png', 'images/water.png', 'images/water.png', 'images/first-water.png', ],
         numRows = Math.round(window.innerHeight / 16) ,
         numCols = Math.round(window.innerWidth / 16) ,
         row, col ;
@@ -131,6 +131,7 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+        pokeball.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -141,28 +142,21 @@ var Engine = (function(global) {
      */
     function makeStage () {
 
-        var backgroundArray = ['images/PokeRoad.png', 'images/playerStart.png'];
+    var backgroundArray = ['images/PokeRoad.png', 'images/playerStart.png'];
 
-        for (var i = 0; i < numCols; i++) {
-            rowImages.push(backgroundArray[Math.floor(Math.random() * backgroundArray.length)]);
-        };
-        function startPlayer(){
-
-           for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < numRows; i++) {
+        rowImages.push(backgroundArray[Math.floor(Math.random() * backgroundArray.length)]);
+        //if all rowImages are commited the last 5 rows will be deleted and replaced with other array
+    }
+    if (i = numRows) {
+        for (var i = 0; i < 9; i++) {
             rowImages.pop();
-           };
-            for (var i = 0; i < 10; i++) {
-            rowImages.push('images/playerStart.png');
-           };
-
-
-            console.log("i ran");
-        }
-        startPlayer();
+        };
+        rowImages.push( 'images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
+    };
 
     }
-        makeStage();
-
+    makeStage();
 
     function render() {
         /* This array holds the relative URL to the image used
@@ -204,6 +198,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+
+        pokeball.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -212,7 +208,7 @@ var Engine = (function(global) {
      */
     function reset() {
         player.x =  window.innerWidth / 2;
-        player.y = window.innerHeight / 1.2;
+        player.y = window.innerHeight / 1.05;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -384,8 +380,20 @@ var Engine = (function(global) {
         'images/enemies/150.png',
         'images/enemies/151.png',
         'images/PokeRoad.png',
-        'images/playerStart.png'
-
+        'images/playerStart.png',
+        'images/water.png',
+        'images/first-water.png',
+        'images/stairs.png',
+        'images/overlay.png',
+        'images/rockyroad.png',
+        'images/left-bottom-rock.png',
+        'images/left-center-rock.png',
+        'images/left-top-rock.png',
+        'images/right-bottom-rock.png',
+        'images/right-center-rock.png',
+        'images/right-top-rock.png',
+        'images/center-center-rock.png',
+        'images/pokeball.png'
 
     ]);
     Resources.onReady(init);
