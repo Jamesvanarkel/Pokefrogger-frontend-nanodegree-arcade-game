@@ -14,9 +14,9 @@
  * a little simpler to work with.
  */
 var rowImages = ['images/water.png', 'images/water.png', 'images/water.png', 'images/first-water.png', ],
-        numRows = Math.round(window.innerHeight / 16) ,
-        numCols = Math.round(window.innerWidth / 16) ,
-        row, col ;
+    numRows = Math.round(window.innerHeight / 16),
+    numCols = Math.round(window.innerWidth / 16),
+    row, col;
 
 
 var Engine = (function(global) {
@@ -29,8 +29,8 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
-        canvasY = canvas.height;
-        canvasX = canvas.width;
+    canvasY = canvas.height;
+    canvasX = canvas.width;
 
 
     doc.body.appendChild(canvas);
@@ -40,7 +40,7 @@ var Engine = (function(global) {
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight ;
+        canvas.height = window.innerHeight;
         /**
          * Your drawings need to be inside this function otherwise they will be reset when
          * you resize the browser window and the canvas goes will be cleared.
@@ -88,35 +88,47 @@ var Engine = (function(global) {
         main();
     }
 
- function checkCollisions() {
-    /* Find minimum distance between player and enemy. If minimum distance is
-    small enough, consider it to be a collision and reset the game. */
-    var colideX = 0.5 * enemy.width;
-    var colideY = enemy.height;
+    function checkCollisions() {
+        /* Find minimum distance between player and enemy. If minimum distance is
+        small enough, consider it to be a collision and reset the game. */
+        var colideX = 0.5 * enemy.width;
+        var colideY = enemy.height;
 
-    var xPlayer = player.x;
-    var yPlayer = player.y;
+        var xPlayer = player.x;
+        var yPlayer = player.y;
 
-    allEnemies.forEach(function(enemy) {
-        if (Math.abs(xPlayer - enemy.x) < colideX && Math.abs(yPlayer - enemy.y) < colideX) {
-            alert("Bang! YOU GOT FROGGED!");
-            reset();
+        allEnemies.forEach(function(enemy) {
+            if (Math.abs(xPlayer - enemy.x) < colideX && Math.abs(yPlayer - enemy.y) < colideX) {
+                alert("Bang! YOU GOT FROGGED!");
+                reset();
+            }
+        });
+    }
+
+    function checkScore() { // function to check if Player collides with Pokeball if so the score should be plussed
+            var pokeballX = pokeball.width;
+            var pokeballY = pokeball.height;
+
+            var playerX = player.x;
+            var playerY = player.y;
+
+            if (Math.abs(playerX - pokeball.x) < pokeballX && Math.abs(playerY - pokeball.y) < pokeballY) {
+                score();
+            }
         }
-    });
-}
-
-    /* This function is called by main (our game loop) and itself calls all
-     * of the functions which may need to update entity's data. Based on how
-     * you implement your collision detection (when two entities occupy the
-     * same space, for instance when your character should die), you may find
-     * the need to add an additional function call here. For now, we've left
-     * it commented out - you may or may not want to implement this
-     * functionality this way (you could just implement collision detection
-     * on the entities themselves within your app.js file).
-     */
+        /* This function is called by main (our game loop) and itself calls all
+         * of the functions which may need to update entity's data. Based on how
+         * you implement your collision detection (when two entities occupy the
+         * same space, for instance when your character should die), you may find
+         * the need to add an additional function call here. For now, we've left
+         * it commented out - you may or may not want to implement this
+         * functionality this way (you could just implement collision detection
+         * on the entities themselves within your app.js file).
+         */
     function update(dt) {
         updateEntities(dt);
-         checkCollisions();
+        checkCollisions();
+        checkScore();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -134,42 +146,52 @@ var Engine = (function(global) {
         pokeball.update();
     }
 
-    /* This function initially draws the "game level", it will then call
-     * the renderEntities function. Remember, this function is called every
-     * game tick (or loop of the game engine) because that's how games work -
-     * they are flipbooks creating the illusion of animation but in reality
-     * they are just drawing the entire screen over and over.
-     */
-    function makeStage () {
 
-    var backgroundArray = ['images/PokeRoad.png', 'images/playerStart.png'];
+    function score() {
+        //sets the pokeball on a random position when fired.
+        pokeball.y = Math.floor(Math.random() * innerHeight);
+        pokeball.x = Math.floor(Math.random() * innerWidth);
 
-    for (var i = 0; i < numRows; i++) {
-        rowImages.push(backgroundArray[Math.floor(Math.random() * backgroundArray.length)]);
-        //if all rowImages are commited the last 5 rows will be deleted and replaced with other array
-    }
-    if (i = numRows) {
-        for (var i = 0; i < 9; i++) {
-            rowImages.pop();
+        //adds 10 to the score.
+        gameScore.content += 10;
+
+         if (levelGame.content == 1 && gameScore.content == 50) { // LEVEL 2 instances
+
+            levelGame.content += 1; // level gives a plus
+            gameScore.content = 0; // Score is reset to 0.
+
         };
-        rowImages.push( 'images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
-    };
 
+        if (levelGame.content == 2 && gameScore.content == 50) { // LEVEL 3 instances
+
+            levelGame.content += 1; // level gives a plus
+            gameScore.content = 0; // Score is reset to 0.
+
+        };
     }
-    makeStage();
+
 
     function render() {
-        /* This array holds the relative URL to the image used
-         * for that particular row of the game level.
-         */
-
-
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-            for (col = 0; col < numCols; col++) {
-                 for (row = 0; row < numRows; row++) {
+         if (pokeball.y < 62) { // Pokeball can't be spawn in water
+            console.log("shots fired")
+            pokeball.y = 64;
+
+        }
+        if (levelGame.content == 1 && gameScore.content < 50) {
+            makeStage(0);
+        };
+        if (levelGame.content == 2 && gameScore.content < 50) {
+            makeStage(1);
+        };
+
+
+
+        for (col = 0; col < numCols; col++) {
+            for (row = 0; row < numRows; row++) {
                 /* The drawImage function of the canvas' context element
                  * requires 3 parameters: the image to draw, the x coordinate
                  * to start drawing and the y coordinate to start drawing.
@@ -177,7 +199,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 16 , row * 16);
+                ctx.drawImage(Resources.get(rowImages[row]), col * 16, row * 16);
             }
         }
         renderEntities();
@@ -190,25 +212,50 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
+            /* Loop through all of the objects within the allEnemies array and call
+             * the render function you have defined.
+             */
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
+
+            scoreboard.render();
+            gameScore.render();
+            levelGame.render();
+
+            player.render();
+            pokeball.render();
+        }
+        /* This function does nothing but it could have been a good place to
+         * handle game reset states - maybe a new game menu or a game over screen
+         * those sorts of things. It's only called once by the init() method.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
+    function makeStage(level) {
 
-        player.render();
+        var levelOneArray = ['images/PokeRoad.png', 'images/playerStart.png'];
+        var levelTwoArray = ['images/water.png', 'images/rockyroad.png'];
+        var array = [levelOneArray, levelTwoArray];
 
-        pokeball.render();
+        for (var i = 0; i < numRows; i++) {
+            rowImages.push(array[level][Math.floor(Math.random() * array[level].length)]);
+            //if all rowImages are commited the last 5 rows will be deleted and replaced with other array
+                    console.log(array[level]);
+
+        }
+        if (i = numRows) {
+            for (var i = 0; i < 9; i++) {
+                rowImages.pop();
+            };
+            rowImages.push('images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
+        };
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
     function reset() {
-        player.x =  window.innerWidth / 2;
+        player.x = window.innerWidth / 2;
         player.y = window.innerHeight / 1.05;
+
+        gameScore.content = 0;
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -216,14 +263,6 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
-        'images/stone-block.png',
-        'images/road-block-one.png',
-        'images/road-block-last.png',
-        'images/road-block.png',
-        'images/water-block.png',
-        'images/grass-block.png',
-        'images/enemy-bug.png',
-        'images/char-boy.png',
         'images/ash-back.png',
         'images/ash-left.png',
         'images/ash-right.png',
@@ -393,7 +432,8 @@ var Engine = (function(global) {
         'images/right-center-rock.png',
         'images/right-top-rock.png',
         'images/center-center-rock.png',
-        'images/pokeball.png'
+        'images/pokeball.png',
+        'images/score-holder.png'
 
     ]);
     Resources.onReady(init);
@@ -404,4 +444,3 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
-
