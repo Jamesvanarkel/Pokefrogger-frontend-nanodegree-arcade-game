@@ -21,16 +21,13 @@ var Enemy = function() {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     this.x = this.x + this.speed * dt;
 
     // If the Enemy exeeds the window width it will be reset by the reset function
     if (this.x > window.innerWidth) {
         this.reset();
-    };
-}
+    }
+};
 
 Enemy.prototype.reset = function() {
     this.x = -110;
@@ -38,25 +35,23 @@ Enemy.prototype.reset = function() {
     this.speed = Math.floor(Math.random() * (400)) + 150;
 
     //regenerate sprite so it is a diffrent Pokémon
-
     this.path = 'images/enemies/'; // default path of image here
 
     this.num = Math.floor(Math.random() * ((0 - 151) + 1) + 151); // generate a number between 1 and 151
     this.sprite = this.path + this.num + ".png"; //make the image string
-}
+};
 
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // ////////////////////////////////////
 // //             PLAYER            //
 // ///////////////////////////////////
 
 var Player = function() {
-
     this.sprite = 'images/ash-back.png';
     this.width = 22;
     this.height = 27;
@@ -66,12 +61,8 @@ var Player = function() {
     this.imgLeft = 'images/ash-left.png';
     this.imgRight = 'images/ash-right.png';
     this.imgDown = 'images/ash-front.png';
+};
 
-}
-
-Player.prototype.update = function() {
-
-}
 Player.prototype.handleInput = function(move) {
     switch (move) {
         case 'left':
@@ -102,10 +93,12 @@ Player.prototype.handleInput = function(move) {
             console.log('space');
             break;
     }
-}
+};
+
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
+
 
 // ////////////////////////////////////
 // //         Pokeball              //
@@ -117,68 +110,67 @@ var Pokeball = function() {
     this.height = 16;
     this.x = Math.floor(Math.random() * innerWidth);
     this.y = Math.floor(Math.random() * innerHeight);
-
-}
-Pokeball.prototype.update = function(dt) {
-
-}
+};
 
 Pokeball.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
+
 Pokeball.prototype.reset = function() {
-        this.y = Math.floor(Math.random() * innerHeight);
-        this.x = Math.floor(Math.random() * innerWidth);
-    }
-    // ////////////////////////////////////
-    // //         Scoreboard            //
-    // ///////////////////////////////////
+    this.y = Math.floor(Math.random() * innerHeight);
+    this.x = Math.floor(Math.random() * innerWidth);
+};
+
+// ////////////////////////////////////
+// //         Scoreboard            //
+// ///////////////////////////////////
+
 var Scoreboard = function() {
     this.sprite = 'images/score-holder.png';
     this.x = 0;
     this.y = 0;
 
-}
-Scoreboard.prototype.render = function() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
 
-    }
-    // ////////////////////////////////////
-    // //            Score              //
-    // ///////////////////////////////////
+Scoreboard.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
+};
+
+// ////////////////////////////////////
+// //            Score              //
+// ///////////////////////////////////
+
 var Score = function() {
     this.content = 0;
     this.x = 62;
     this.y = 25;
-}
+};
 
 Score.prototype.render = function() {
     ctx.fillText(this.content, this.x, this.y);
-}
-Score.prototype.update = function(dt) {
+};
 
-}
+
 
 // ////////////////////////////////////
 // //            Level              //
 // ///////////////////////////////////
+
 var Level = function() {
     this.content = 1;
     this.x = 62;
     this.y = 44;
-}
+};
 
 Level.prototype.render = function() {
-        ctx.fillText(this.content, this.x, this.y);
-    }
-    // ////////////////////////////////////
-    // //         Instaniates            //
-    // ///////////////////////////////////
+    ctx.fillText(this.content, this.x, this.y);
+};
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-// var myVar = setInterval (newEnemies, 2000);
+// ////////////////////////////////////
+// //         Instaniates            //
+// ///////////////////////////////////
+
 var allEnemies = [];
 var player = new Player();
 var pokeball = new Pokeball();
@@ -186,16 +178,11 @@ var scoreboard = new Scoreboard();
 var gameScore = new Score();
 var levelGame = new Level();
 
-
-
-
 for (wantedEnemies = 0; wantedEnemies < 2; wantedEnemies++) {
     var enemy = new Enemy();
     allEnemies.push(enemy);
 }
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',

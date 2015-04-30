@@ -25,10 +25,10 @@ var Engine = (function(global) {
      * set the canvas elements height/width and add it to the DOM.
      */
     var doc = global.document,
-        win = global.window,
-        canvas = doc.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
-        lastTime;
+    win = global.window,
+    canvas = doc.createElement('canvas'),
+    ctx = canvas.getContext('2d'),
+    lastTime;
     canvasY = canvas.height;
     canvasX = canvas.width;
 
@@ -46,6 +46,7 @@ var Engine = (function(global) {
          * you resize the browser window and the canvas goes will be cleared.
          */
     }
+
     resizeCanvas();
 
     /* This function serves as the kickoff point for the game loop itself
@@ -76,7 +77,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
-    };
+    }
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
@@ -104,46 +105,30 @@ var Engine = (function(global) {
             }
         });
     }
+    /* function to check if Player collides with Pokeball if so the score
+    should be plussed*/
+    function checkScore() {
+        var pokeballX = pokeball.width;
+        var pokeballY = pokeball.height;
 
-    function checkScore() { // function to check if Player collides with Pokeball if so the score should be plussed
-            var pokeballX = pokeball.width;
-            var pokeballY = pokeball.height;
+        var playerX = player.x;
+        var playerY = player.y;
 
-            var playerX = player.x;
-            var playerY = player.y;
-
-            if (Math.abs(playerX - pokeball.x) < pokeballX && Math.abs(playerY - pokeball.y) < pokeballY) {
-                score();
-            }
+        if (Math.abs(playerX - pokeball.x) < pokeballX && Math.abs(playerY - pokeball.y) < pokeballY) {
+            score();
         }
-        /* This function is called by main (our game loop) and itself calls all
-         * of the functions which may need to update entity's data. Based on how
-         * you implement your collision detection (when two entities occupy the
-         * same space, for instance when your character should die), you may find
-         * the need to add an additional function call here. For now, we've left
-         * it commented out - you may or may not want to implement this
-         * functionality this way (you could just implement collision detection
-         * on the entities themselves within your app.js file).
-         */
+    }
+
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
         checkScore();
     }
 
-    /* This is called by the update function  and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
-     * their update() methods. It will then call the update function for your
-     * player object. These update methods should focus purely on updating
-     * the data/properties related to  the object. Do your drawing in your
-     * render methods.
-     */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
-        pokeball.update();
     }
 
 
@@ -155,40 +140,35 @@ var Engine = (function(global) {
         //adds 10 to the score.
         gameScore.content += 10;
 
-         if (levelGame.content == 1 && gameScore.content == 50) { // LEVEL 2 instances
+        if (levelGame.content == 1 && gameScore.content == 50) { // LEVEL 2 instances
 
             levelGame.content += 1; // level gives a plus
             gameScore.content = 0; // Score is reset to 0.
 
-        };
+        }
 
         if (levelGame.content == 2 && gameScore.content == 50) { // LEVEL 3 instances
 
             levelGame.content += 1; // level gives a plus
             gameScore.content = 0; // Score is reset to 0.
 
-        };
+        }
     }
 
 
     function render() {
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-         if (pokeball.y < 62) { // Pokeball can't be spawn in water
+        if (pokeball.y < 62) { // Pokeball can't be spawn in water
             console.log("shots fired")
             pokeball.y = 64;
-
         }
+
         if (levelGame.content == 1 && gameScore.content < 50) {
             makeStage(0);
-        };
+        }
+
         if (levelGame.content == 2 && gameScore.content < 50) {
             makeStage(1);
-        };
-
-
+        }
 
         for (col = 0; col < numCols; col++) {
             for (row = 0; row < numRows; row++) {
@@ -205,31 +185,22 @@ var Engine = (function(global) {
         renderEntities();
     }
 
-
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
     function renderEntities() {
-            /* Loop through all of the objects within the allEnemies array and call
-             * the render function you have defined.
-             */
-            allEnemies.forEach(function(enemy) {
-                enemy.render();
-            });
-
-            scoreboard.render();
-            gameScore.render();
-            levelGame.render();
-
-            player.render();
-            pokeball.render();
-        }
-        /* This function does nothing but it could have been a good place to
-         * handle game reset states - maybe a new game menu or a game over screen
-         * those sorts of things. It's only called once by the init() method.
+        /* Loop through all of the objects within the allEnemies array and call
+         * the render function you have defined.
          */
+        allEnemies.forEach(function(enemy) {
+            enemy.render();
+        });
+
+        scoreboard.render();
+        gameScore.render();
+        levelGame.render();
+
+        player.render();
+        pokeball.render();
+    }
+
     function makeStage(level) {
 
         var levelOneArray = ['images/PokeRoad.png', 'images/playerStart.png'];
@@ -238,26 +209,24 @@ var Engine = (function(global) {
 
         for (var i = 0; i < numRows; i++) {
             rowImages.push(array[level][Math.floor(Math.random() * array[level].length)]);
-            //if all rowImages are commited the last 5 rows will be deleted and replaced with other array
-                    console.log(array[level]);
-
         }
+
         if (i = numRows) {
             for (var i = 0; i < 9; i++) {
                 rowImages.pop();
-            };
+            }
             rowImages.push('images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
-        };
+        }
     }
 
     function reset() {
+
         player.x = window.innerWidth / 2;
         player.y = window.innerHeight / 1.05;
 
         gameScore.content = 0;
 
     }
-
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
