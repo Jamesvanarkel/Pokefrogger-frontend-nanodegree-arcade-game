@@ -158,7 +158,7 @@ var Engine = (function(global) {
 
     function render() {
         if (pokeball.y < 62) { // Pokeball can't be spawn in water
-            console.log("shots fired")
+            console.log("shots fired");
             pokeball.y = 64;
         }
 
@@ -212,7 +212,7 @@ var Engine = (function(global) {
         }
 
         if (i = numRows) {
-            for (var i = 0; i < 9; i++) {
+            for (var j = 0; j < 9; j++) {
                 rowImages.pop();
             }
             rowImages.push('images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
@@ -413,3 +413,19 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
+// Hello.
+//
+// This is JSHint, a tool that helps to detect errors and potential
+// problems in your JavaScript code.
+//
+// To start, simply enter some JavaScript anywhere on this page. Your
+// report will appear on the right side.
+//
+// Additionally, you can toggle specific options in the Configure
+// menu.
+
+function main() {
+  return 'Hello, World!';
+}
+
+main();

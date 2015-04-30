@@ -70,19 +70,16 @@ Player.prototype.handleInput = function(move) {
             this.x -= 22;
             player.sprite = player.imgLeft;
             break; // left key
-            break;
         case 'up':
             if (this.y - 64 < 0) return;
             this.y -= 22;
             player.sprite = player.imgUp;
             break; // up key
-            break;
         case 'right':
             if (this.x + 31 > window.innerWidth) return;
             this.x += 22;
             player.sprite = player.imgRight;
             break; // right key
-            break;
         case 'down':
             if (this.y + 40 > window.innerHeight) return;
             this.y += 22;
@@ -178,7 +175,7 @@ var scoreboard = new Scoreboard();
 var gameScore = new Score();
 var levelGame = new Level();
 
-for (wantedEnemies = 0; wantedEnemies < 2; wantedEnemies++) {
+for (var wantedEnemies = 0; wantedEnemies < 2; wantedEnemies++) {
     var enemy = new Enemy();
     allEnemies.push(enemy);
 }
