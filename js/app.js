@@ -1,7 +1,7 @@
 // ///////////////////////////////////
 // //             ENEMY             //
 // ///////////////////////////////////
-
+"use strict";
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -24,7 +24,7 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + this.speed * dt;
 
     // If the Enemy exeeds the window width it will be reset by the reset function
-    if (this.x > window.innerWidth) {
+    if (this.x >= canvasWidth) {
         this.reset();
     }
 };
@@ -76,12 +76,12 @@ Player.prototype.handleInput = function(move) {
             player.sprite = player.imgUp;
             break; // up key
         case 'right':
-            if (this.x + 31 > window.innerWidth) return;
+            if (this.x + 31 > canvasWidth) return;
             this.x += 22;
             player.sprite = player.imgRight;
             break; // right key
         case 'down':
-            if (this.y + 40 > window.innerHeight) return;
+            if (this.y + 40 > canvasHeight) return;
             this.y += 22;
             player.sprite = player.imgDown;
             break; // down key
@@ -95,7 +95,6 @@ Player.prototype.handleInput = function(move) {
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-
 
 // ////////////////////////////////////
 // //         Pokeball              //
@@ -148,8 +147,6 @@ Score.prototype.render = function() {
     ctx.fillText(this.content, this.x, this.y);
 };
 
-
-
 // ////////////////////////////////////
 // //            Level              //
 // ///////////////////////////////////
@@ -167,6 +164,8 @@ Level.prototype.render = function() {
 // ////////////////////////////////////
 // //         Instaniates            //
 // ///////////////////////////////////
+var canvasWidth = window.innerWidth;
+var canvasHeight = window.innerHeight;
 
 var allEnemies = [];
 var player = new Player();
@@ -175,7 +174,7 @@ var scoreboard = new Scoreboard();
 var gameScore = new Score();
 var levelGame = new Level();
 
-for (var wantedEnemies = 0; wantedEnemies < 2; wantedEnemies++) {
+for (var wantedEnemies = 0; wantedEnemies < 6; wantedEnemies++) {
     var enemy = new Enemy();
     allEnemies.push(enemy);
 }

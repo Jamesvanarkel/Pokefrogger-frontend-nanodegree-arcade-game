@@ -13,10 +13,15 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-var rowImages = ['images/water.png', 'images/water.png', 'images/water.png', 'images/first-water.png', ],
+"use strict";
+var rowImages = [],
     numRows = Math.round(window.innerHeight / 16),
     numCols = Math.round(window.innerWidth / 16),
     row, col;
+
+var startOne = ['images/water.png', 'images/water.png', 'images/water.png', 'images/first-water.png', ];
+var startTwo = ['images/ice2.png', 'images/ice2.png', 'images/ice2.png', 'images/last_ice.png', ];
+var startThree = ['images/rock/other.png', 'images/rock/other.png', 'images/rock/topbeforelast.png', 'images/rock/toplast.png', ];
 
 
 var Engine = (function(global) {
@@ -29,8 +34,8 @@ var Engine = (function(global) {
     canvas = doc.createElement('canvas'),
     ctx = canvas.getContext('2d'),
     lastTime;
-    canvasY = canvas.height;
-    canvasX = canvas.width;
+    var canvasY = canvas.height;
+    var canvasX = canvas.width;
 
 
     doc.body.appendChild(canvas);
@@ -39,15 +44,12 @@ var Engine = (function(global) {
     window.addEventListener('resize', resizeCanvas, true);
 
     function resizeCanvas() {
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        /**
-         * Your drawings need to be inside this function otherwise they will be reset when
-         * you resize the browser window and the canvas goes will be cleared.
-         */
+
     }
 
-    resizeCanvas();
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -122,13 +124,19 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+
+        makeStage();
+
         checkScore();
+        resizeCanvas();
     }
 
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
+
     }
 
 
@@ -147,7 +155,7 @@ var Engine = (function(global) {
 
         }
 
-        if (levelGame.content == 2 && gameScore.content == 50) { // LEVEL 3 instances
+        if (levelGame.content == 2 && gameScore.content == 100) { // LEVEL 3 instances
 
             levelGame.content += 1; // level gives a plus
             gameScore.content = 0; // Score is reset to 0.
@@ -160,14 +168,6 @@ var Engine = (function(global) {
         if (pokeball.y < 62) { // Pokeball can't be spawn in water
             console.log("shots fired");
             pokeball.y = 64;
-        }
-
-        if (levelGame.content == 1 && gameScore.content < 50) {
-            makeStage(0);
-        }
-
-        if (levelGame.content == 2 && gameScore.content < 50) {
-            makeStage(1);
         }
 
         for (col = 0; col < numCols; col++) {
@@ -201,14 +201,37 @@ var Engine = (function(global) {
         pokeball.render();
     }
 
-    function makeStage(level) {
+    function makeStage() {
 
         var levelOneArray = ['images/PokeRoad.png', 'images/playerStart.png'];
-        var levelTwoArray = ['images/water.png', 'images/rockyroad.png'];
-        var array = [levelOneArray, levelTwoArray];
+        var levelTwoArray = ['images/ice2.png', 'images/ice1.png'];
+        var levelThreeArray = ['images/rock/other.png'];
+
+
+        var level;
+
+        if (levelGame.content == 1 ) { // LEVEL 1 instances
+            rowImages = [];
+            rowImages = startOne;
+            level = levelOneArray;
+        }
+
+        if (levelGame.content == 2) { // LEVEL 2 instances
+            rowImages = [];
+            rowImages = startTwo;
+            level = levelTwoArray;
+
+        }
+
+        if (levelGame.content == 3) { // LEVEL 4 instances
+            rowImages = [];
+            rowImages = startThree;
+            level = levelThreeArray;
+
+        }
 
         for (var i = 0; i < numRows; i++) {
-            rowImages.push(array[level][Math.floor(Math.random() * array[level].length)]);
+            rowImages.push(level[Math.floor(Math.random() * level.length)]);
         }
 
         if (i = numRows) {
@@ -218,7 +241,6 @@ var Engine = (function(global) {
             rowImages.push('images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
         }
     }
-
     function reset() {
 
         player.x = window.innerWidth / 2;
@@ -402,7 +424,15 @@ var Engine = (function(global) {
         'images/right-top-rock.png',
         'images/center-center-rock.png',
         'images/pokeball.png',
-        'images/score-holder.png'
+        'images/score-holder.png',
+        'images/ice1.png',
+        'images/ice2.png',
+        'images/first_ice.png',
+        'images/last_ice.png',
+        'images/rock/2.png',
+        'images/rock/other.png',
+        'images/rock/topbeforelast.png',
+        'images/rock/toplast.png'
 
     ]);
     Resources.onReady(init);
@@ -413,19 +443,3 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
-// Hello.
-//
-// This is JSHint, a tool that helps to detect errors and potential
-// problems in your JavaScript code.
-//
-// To start, simply enter some JavaScript anywhere on this page. Your
-// report will appear on the right side.
-//
-// Additionally, you can toggle specific options in the Configure
-// menu.
-
-function main() {
-  return 'Hello, World!';
-}
-
-main();
