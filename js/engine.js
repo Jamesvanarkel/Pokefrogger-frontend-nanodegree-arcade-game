@@ -37,10 +37,12 @@ var Engine = (function(global) {
     var canvasY = canvas.height;
     var canvasX = canvas.width;
 
+    ctx.canvas.width  = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
 
     doc.body.appendChild(canvas);
 
-    // resize the canvas to fill browser window dynamically
+    /* resize the canvas to fill browser window dynamically */
     window.addEventListener('resize', resizeCanvas, true);
 
     function resizeCanvas() {
@@ -48,6 +50,15 @@ var Engine = (function(global) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+    }
+
+    window.onresize = function(){
+        console.log("its happening");
+        reset();
+
+        if (pokeball.x > canvasX) {
+            pokeball.reset();
+        };
     }
 
 
@@ -92,7 +103,7 @@ var Engine = (function(global) {
     }
 
     function checkCollisions() {
-        /* Find minimum distance between player and enemy. If minimum distance is
+        /** Find minimum distance between player and enemy. If minimum distance is
         small enough, consider it to be a collision and reset the game. */
         var colideX = 0.5 * enemy.width;
         var colideY = enemy.height;
@@ -107,8 +118,8 @@ var Engine = (function(global) {
             }
         });
     }
-    /* function to check if Player collides with Pokeball if so the score
-    should be plussed*/
+    /** function to check if Player collides with Pokeball if so the score
+    should be plussed */
     function checkScore() {
         var pokeballX = pokeball.width;
         var pokeballY = pokeball.height;
@@ -126,26 +137,24 @@ var Engine = (function(global) {
         checkCollisions();
 
         makeStage();
+        resizeCanvas();
 
         checkScore();
-        resizeCanvas();
     }
 
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-
-
     }
 
 
     function score() {
-        //sets the pokeball on a random position when fired.
+        /** sets the pokeball on a random position when fired.*/
         pokeball.y = Math.floor(Math.random() * innerHeight);
         pokeball.x = Math.floor(Math.random() * innerWidth);
 
-        //adds 10 to the score.
+        /** adds 10 to the score.*/
         gameScore.content += 10;
 
         if (levelGame.content == 1 && gameScore.content == 50) { // LEVEL 2 instances
@@ -210,20 +219,20 @@ var Engine = (function(global) {
 
         var level;
 
-        if (levelGame.content == 1 ) { // LEVEL 1 instances
+        if (levelGame.content == 1 ) { /** LEVEL 1 instances */
             rowImages = [];
             rowImages = startOne;
             level = levelOneArray;
         }
 
-        if (levelGame.content == 2) { // LEVEL 2 instances
+        if (levelGame.content == 2) { /** LEVEL 2 instances */
             rowImages = [];
             rowImages = startTwo;
             level = levelTwoArray;
 
         }
 
-        if (levelGame.content == 3) { // LEVEL 4 instances
+        if (levelGame.content == 3) { /** LEVEL 3 instances */
             rowImages = [];
             rowImages = startThree;
             level = levelThreeArray;
@@ -241,11 +250,12 @@ var Engine = (function(global) {
             rowImages.push('images/stairs.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png', 'images/rockyroad.png');
         }
     }
+
     function reset() {
+        resizeCanvas();
 
         player.x = window.innerWidth / 2;
         player.y = window.innerHeight / 1.05;
-
         gameScore.content = 0;
 
     }
