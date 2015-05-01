@@ -51,9 +51,13 @@ var Engine = (function(global) {
         canvas.height = window.innerHeight;
 
     }
-
+    /* If the window is resized this function will fire
+     * And all entities in reset will fire,
+     * if the pokeball x cordinate is bigger that the canvas it will
+     * be reset.
+     */
     window.onresize = function(){
-        console.log("its happening");
+
         reset();
 
         if (pokeball.x > canvasX) {
