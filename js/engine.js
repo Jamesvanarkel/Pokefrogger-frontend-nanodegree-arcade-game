@@ -73,8 +73,8 @@ var Engine = (function(global) {
 
         if (pokeball.x > canvasX) {
             pokeball.reset();
-        };
-    }
+        }
+    };
 
 
     /* This function serves as the kickoff point for the game loop itself
