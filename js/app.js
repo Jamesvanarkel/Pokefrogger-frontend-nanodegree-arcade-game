@@ -180,6 +180,7 @@ for (var wantedEnemies = 0; wantedEnemies < 6; wantedEnemies++) {
 }
 
 document.addEventListener('keyup', function(e) {
+    /*TODO: Make functions for touch http://seb.ly/2011/04/multi-touch-game-controller-in-javascripthtml5-for-ipad/ */
     var allowedKeys = {
         37: 'left',
         38: 'up',
