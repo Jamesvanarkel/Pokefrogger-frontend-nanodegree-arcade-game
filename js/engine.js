@@ -46,9 +46,9 @@ var Engine = (function(global) {
     window.addEventListener('resize', resizeCanvas, true);
 
     function resizeCanvas() {
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
 
     }
     /* If the window is resized this function will fire
@@ -59,6 +59,17 @@ var Engine = (function(global) {
     window.onresize = function(){
 
         reset();
+        /* recalculate the width of canvas */
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        /* append the width to the variable that is used to move the enemy and hero around */
+        canvasWidth = canvas.width;
+        canvasHeight = canvas.height;
+        /** Recalculate the number of Rows and Colls if the
+        *   resize is active
+        **/
+        numRows = Math.round(window.innerHeight / 16);
+        numCols = Math.round(window.innerWidth / 16);
 
         if (pokeball.x > canvasX) {
             pokeball.reset();
@@ -182,7 +193,6 @@ var Engine = (function(global) {
             console.log("shots fired");
             pokeball.y = 64;
         }
-
         for (col = 0; col < numCols; col++) {
             for (row = 0; row < numRows; row++) {
                 /* The drawImage function of the canvas' context element
